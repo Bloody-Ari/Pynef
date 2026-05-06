@@ -1,4 +1,4 @@
-import pynef
+from lib import pynef
 
 ####################################################################
 # Nota: al script no utilizar GUI los objetos en el archivo de CAD #
