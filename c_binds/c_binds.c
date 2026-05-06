@@ -1,9 +1,14 @@
+#ifndef fprintf
+#include <stdio.h>
+#endif
+
 #ifndef Py_Object
 #include <Python.h>
 #endif
 
-#ifndef fprintf
-#include <stdio.h>
+#ifndef PythonData
+#include "include/pynef_types.h"
+#include "include/pynef_functions.h"
 #endif
 
 /*
