@@ -2,6 +2,10 @@
 #include <stdio.h>
 #endif
 
+#ifndef Py_Object
+#include <Python.h>
+#endif
+
 #include "c_binds/include/pynef_types.h"
 #include "c_binds/include/pynef_functions.h"
 
