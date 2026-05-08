@@ -54,9 +54,18 @@ int pynefWrapper(float new_nozzle_parameters[4], char file_name[], char file_typ
     printf("Failed on updateNozzleWrapper\n");
     return -1;
   }
-  if(exportNozzleWrapper(&python_data, file_name, file_type, target_dir, 1) != 0){
-    printf("Failed on exportNozzleWrapper\n");
-    return -1;
+
+  if(target_dir == NULL){
+    printf("[FROM C] [FROM WRAPPER] Using default export directory.\n");
+    if(exportNozzleWrapper(&python_data, file_name, file_type, target_dir, 1) != 0){
+      printf("Failed on exportNozzleWrapper\n");
+      return -1;
+    }
+  } else {
+      if(exportNozzleWrapper(&python_data, file_name, file_type, target_dir, 0) != 0){
+        printf("Failed on exportNozzleWrapper\n");
+        return -1;
+      }
   }
 
   killPython(&python_data);
@@ -74,12 +83,13 @@ struct PythonData initializePythonData(){
 }
 
 int killPython(struct PythonData *python_data){
-  Py_Finalize();
   Py_DECREF(python_data->pValue);
   Py_DECREF(python_data->pName);
   Py_DECREF(python_data->pModule);
   Py_DECREF(python_data->pFunc);
   Py_DECREF(python_data->pArgs);
+  Py_Finalize();
+  printf("Killed the snake.\n");
   return 0;
 }
 
@@ -175,7 +185,11 @@ int exportNozzleWrapper(struct PythonData *python_data, char file_name[], char f
     printf("[FROM C] Found Python exportNozzle() Function.\n");
 
     // fill arguments
-    python_data->pArgs = PyTuple_New(3);
+    if(!use_default_taget_dir)
+      python_data->pArgs = PyTuple_New(3);
+    else
+      python_data->pArgs = PyTuple_New(2);
+
     python_data->pValue = PyUnicode_FromString(file_name);
     if (python_data->pValue == NULL) {
       fprintf(stderr, "[FROM C] Couldn't convert file_name\n");
@@ -192,14 +206,19 @@ int exportNozzleWrapper(struct PythonData *python_data, char file_name[], char f
     printf("[FROM C] file_type: %s\n", PyBytes_AsString(PyUnicode_AsASCIIString(python_data->pValue)));
     PyTuple_SetItem(python_data->pArgs, 1, python_data->pValue);
 
-    python_data->pValue = PyUnicode_FromString(target_dir);
-    if (python_data->pValue == NULL) {
-      fprintf(stderr, "[FROM C] Couldn't convert file_name\n");
-      return -1;
+    if(!use_default_taget_dir){
+      python_data->pValue = PyUnicode_FromString(target_dir);
+      if (python_data->pValue == NULL) {
+        fprintf(stderr, "[FROM C] Couldn't convert file_name\n");
+        return -1;
+      }
+      printf("[FROM C] target_dir: %s\n", PyBytes_AsString(PyUnicode_AsASCIIString(python_data->pValue)));
+      PyTuple_SetItem(python_data->pArgs, 2, python_data->pValue);
+    } else {
+      printf("[FROM C] using default export directory.\n");
     }
-    printf("[FROM C] target_dir: %s\n", PyBytes_AsString(PyUnicode_AsASCIIString(python_data->pValue)));
-    PyTuple_SetItem(python_data->pArgs, 2, python_data->pValue);
     printf("[FROM C] Converted arguments.\n");
+    PyErr_Print();
     python_data->pValue = PyObject_CallObject(python_data->pFunc, python_data->pArgs);
     PyErr_Print();
 
@@ -207,6 +226,7 @@ int exportNozzleWrapper(struct PythonData *python_data, char file_name[], char f
       printf("[FROM C] Success!\n");
       printf("[FROM C] Result of call: %ld\n", PyLong_AsLong(python_data->pValue));
       PyErr_Print();
+      return 0;
 
     } else {
       fprintf(stderr,"[FROM C] Call failed\n");

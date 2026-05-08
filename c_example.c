@@ -12,11 +12,11 @@
 int main(){
   // should be arguments!
   float new_nozzle[] = {8.0, 5.0, 2.0, 6.0, 7.0};
-  char file_name[] = {"FromRepo"};
+  char file_name[] = {"EwEwE"};
   char file_type[] = {"3mf"};
-  char target_dir[] = {"/home/eliz/Downloads"};
+  // char target_dir[] = {"/home/eliz/Downloads"};
 
-  if(pynefWrapper(new_nozzle, file_name, file_type, target_dir) == 0){
+  if(pynefWrapper(new_nozzle, file_name, file_type, NULL) == 0){
     printf("[FROM C] All good!");
     return 0;
   } else {
