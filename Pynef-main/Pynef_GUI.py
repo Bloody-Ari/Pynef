@@ -3,6 +3,10 @@ from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 from sys import path, platform
 import threading
+import os
+
+# Definir la constante faltante
+DEFAULT_OUT_DIR = Path.home() / "Desktop" / "NozzleDesigner"
 
 class NozzleDesignerGUI:
     def __init__(self, root):
@@ -110,3 +114,69 @@ class NozzleDesignerGUI:
         # Tipo de archivo
         ttk.Label(export_frame, text="Formato:").grid(row=1, column=0, sticky='w', pady=5)
         file_type_combo = ttk.Combobox(export_frame, textvariable=self.file_type, values=['stl', 'obj', 'ply', 'step'], width=10)
+        file_type_combo.grid(row=1, column=1, padx=10, pady=5, sticky='w')
+        
+        # Directorio de salida
+        ttk.Label(export_frame, text="Directorio:").grid(row=2, column=0, sticky='w', pady=5)
+        dir_frame = ttk.Frame(export_frame)
+        dir_frame.grid(row=2, column=1, padx=10, pady=5, sticky='w')
+        ttk.Entry(dir_frame, textvariable=self.output_dir, width=25).pack(side='left')
+        ttk.Button(dir_frame, text="Explorar", command=self.browse_output_dir).pack(side='left', padx=5)
+        
+        # Botón exportar
+        ttk.Button(export_frame, text="Exportar Nozzle", 
+                  command=self.export_nozzle_threaded).grid(row=3, column=0, columnspan=2, pady=20)
+    
+    def setup_status_tab(self, parent):
+        # Text widget para mostrar estado
+        self.status_text = tk.Text(parent, height=20, width=70)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.status_text.yview)
+        self.status_text.configure(yscrollcommand=scrollbar.set)
+        
+        self.status_text.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+        scrollbar.pack(side="right", fill="y", pady=10)
+    
+    # Métodos placeholder para evitar errores
+    def update_nozzle_threaded(self):
+        self.status_var.set("Actualizando nozzle...")
+        threading.Thread(target=self.update_nozzle, daemon=True).start()
+    
+    def update_nozzle(self):
+        # Placeholder
+        self.root.after(0, lambda: self.status_var.set("Nozzle actualizado"))
+    
+    def load_default_file_threaded(self):
+        threading.Thread(target=self.load_default_file, daemon=True).start()
+    
+    def load_default_file(self):
+        # Placeholder
+        self.root.after(0, lambda: self.status_var.set("Archivo predeterminado cargado"))
+    
+    def reset_values(self):
+        self.chamber_radius.set(20.0)
+        self.chamber_cone_length.set(30.0)
+        self.throat_radius.set(5.0)
+        self.exit_cone_length.set(40.0)
+        self.exit_radius.set(15.0)
+        self.status_var.set("Valores reseteados")
+    
+    def browse_output_dir(self):
+        directory = filedialog.askdirectory(initialdir=self.output_dir.get())
+        if directory:
+            self.output_dir.set(directory)
+    
+    def export_nozzle_threaded(self):
+        self.status_var.set("Exportando...")
+        threading.Thread(target=self.export_nozzle, daemon=True).start()
+    
+    def export_nozzle(self):
+        # Placeholder
+        self.root.after(0, lambda: self.status_var.set("Nozzle exportado exitosamente"))
+
+def main():
+    root = tk.Tk()
+    app = NozzleDesignerGUI(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
