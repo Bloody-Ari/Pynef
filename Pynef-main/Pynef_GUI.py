@@ -4,29 +4,6 @@ from pathlib import Path
 from sys import path, platform
 import threading
 
-# Configuración inicial de FreeCAD (tu código original)
-FREECAD_PATH = ''
-DEFAULT_OUT_DIR = Path("~/Documents").expanduser()
-DEFAULT_FILE = "defaultNozzle"
-
-if platform == 'win32':
-    FREECAD_PATH = 'C:\\Program Files\\FreeCAD\\bin'
-    print("[INFO] Platform: Windows")
-elif platform == 'linux':
-    FREECAD_PATH = '/usr/lib/freecad/lib'
-elif platform == 'darwin':
-    FREECAD_PATH = '/Applications/FreeCAD.app/Contents/Resources/lib'
-    print("[INFO] Platform: Mac")
-
-if FREECAD_PATH == '':
-    print("OS not supported")
-    exit()
-
-path.append(FREECAD_PATH)
-
-import FreeCAD as App
-import Mesh
-
 class NozzleDesignerGUI:
     def __init__(self, root):
         self.root = root
