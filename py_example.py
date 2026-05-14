@@ -34,4 +34,4 @@ pynef.updateNozzle(6.375, 3.370, 3.005, 3.7505, 2.781)
 #   file_name
 #   file_type
 #   target_dir (default = user documents)
-pynef.exportNozzle("NewNozzle", "stl", None)
+pynef.exportNozzle("NewNozzle", "stl")
