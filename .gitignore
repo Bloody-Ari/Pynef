@@ -3,3 +3,4 @@
 build/
 bin/
 lib/pynef/__pycache__/
+lib/pynef/cad_files/
