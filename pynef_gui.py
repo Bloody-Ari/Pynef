@@ -56,6 +56,11 @@ class NozzleDesignerGUI:
         status_bar.pack(side=tk.BOTTOM, fill=tk.X)
     
     def setup_design_tab(self, parent):
+        # Deberia pedir:
+        # Diametro de camara (para nosotros es design constriant)
+        # Ac/At (default: 4.5)
+        # Ae/At (CEA/CAT-ME/de donde sea)
+        # (Checkear py_input_example.py)
         # Título
         title = ttk.Label(parent, text="Parámetros del Nozzle (mm)", 
                          font=('Arial', 14, 'bold'))
