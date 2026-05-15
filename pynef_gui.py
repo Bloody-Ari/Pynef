@@ -5,6 +5,8 @@ from sys import path, platform
 import threading
 import os
 
+from lib import pynef
+
 class NozzleDesignerGUI:
     def __init__(self, root):
         self.root = root
@@ -13,13 +15,13 @@ class NozzleDesignerGUI:
         self.root.resizable(True, True)
         
         # Variables de entrada
-        self.chamber_radius = tk.DoubleVar(value=20.0)
-        self.chamber_cone_length = tk.DoubleVar(value=30.0)
-        self.throat_radius = tk.DoubleVar(value=5.0)
-        self.exit_cone_length = tk.DoubleVar(value=40.0)
-        self.exit_radius = tk.DoubleVar(value=15.0)
-        
-        self.output_dir = Path("~/Documents").expanduser()
+        self.chamber_radius = tk.DoubleVar(value=6.375)
+        self.chamber_cone_length = tk.DoubleVar(value=12.576)
+        self.throat_radius = tk.DoubleVar(value=3.005)
+        self.exit_cone_length = tk.DoubleVar(value=9.072)
+        self.exit_radius = tk.DoubleVar(value=5.436)
+
+        self.output_dir = tk.StringVar(value=Path("~/Documents").expanduser())
         self.file_name = tk.StringVar(value="my_nozzle")
         self.file_type = tk.StringVar(value="stl")
         
@@ -110,7 +112,7 @@ class NozzleDesignerGUI:
         
         # Tipo de archivo
         ttk.Label(export_frame, text="Formato:").grid(row=1, column=0, sticky='w', pady=5)
-        file_type_combo = ttk.Combobox(export_frame, textvariable=self.file_type, values=['stl', '3mf', 'step'], width=10)
+        file_type_combo = ttk.Combobox(export_frame, textvariable=self.file_type, values=['stl', '3mf'], width=10)
         file_type_combo.grid(row=1, column=1, padx=10, pady=5, sticky='w')
         
         # Directorio de salida
@@ -140,6 +142,7 @@ class NozzleDesignerGUI:
     
     def update_nozzle(self):
         # Placeholder
+        pynef.updateNozzle(self.chamber_radius.get(), self.chamber_cone_length.get(), self.throat_radius.get(), self.exit_radius.get(), self.exit_cone_length.get())
         self.root.after(0, lambda: self.status_var.set("Nozzle actualizado"))
     
     def load_default_file_threaded(self):
@@ -147,6 +150,7 @@ class NozzleDesignerGUI:
     
     def load_default_file(self):
         # Placeholder
+        pynef.openDefaultFile()
         self.root.after(0, lambda: self.status_var.set("Archivo predeterminado cargado"))
     
     def reset_values(self):
@@ -168,6 +172,7 @@ class NozzleDesignerGUI:
     
     def export_nozzle(self):
         # Placeholder
+        pynef.exportNozzle(self.file_name.get(), self.file_type.get(), self.output_dir.get())
         self.root.after(0, lambda: self.status_var.set("Nozzle exportado exitosamente"))
 
 def main():
