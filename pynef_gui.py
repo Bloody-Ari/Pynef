@@ -150,11 +150,11 @@ class NozzleDesignerGUI:
         self.root.after(0, lambda: self.status_var.set("Archivo predeterminado cargado"))
     
     def reset_values(self):
-        self.chamber_radius.set(20.0)
-        self.chamber_cone_length.set(30.0)
-        self.throat_radius.set(5.0)
-        self.exit_cone_length.set(40.0)
-        self.exit_radius.set(15.0)
+        self.chamber_radius.set(6.375)
+        self.chamber_cone_length.set(12.576)
+        self.throat_radius.set(3.005)
+        self.exit_cone_length.set(9.072)
+        self.exit_radius.set(5.436)
         self.status_var.set("Valores reseteados")
     
     def browse_output_dir(self):
