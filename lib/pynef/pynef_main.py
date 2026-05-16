@@ -20,7 +20,7 @@ DEFAULT_OUT_DIR = Path("~/Documents").expanduser()
 DEFAULT_FILE = "defaultNozzle"
 
 if platform == 'win32':
-    FREECAD_PATH = 'C:\\Program Files\\FreeCAD\\bin'
+    FREECAD_PATH = 'C:\\Program Files\\FreeCAD 1.1\\bin'
     print("[INFO] Platform: Windows")
     print("[INFO] If you get an incompatibility problem with a python.dll install that python version.")
     print("[INFO] ie. if it throws and error with python311.dll (or sth like that) you should install python 3.11")
